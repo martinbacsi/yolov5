@@ -141,7 +141,10 @@ public class MultiBoxTracker {
       boxPaint.setColor(recognition.color);
 
       float cornerSize = Math.min(trackedPos.width(), trackedPos.height()) / 8.0f;
-      canvas.drawRoundRect(trackedPos, cornerSize, cornerSize, boxPaint);
+      //canvas.drawRoundRect(trackedPos, cornerSize, cornerSize, boxPaint);
+
+      float radius = Math.max(Math.abs(trackedPos.left - trackedPos.right) / 2, Math.abs(trackedPos.top - trackedPos.bottom) / 2);
+      canvas.drawCircle(trackedPos.centerX(), trackedPos.centerY(), radius, boxPaint);
 
       final String labelString =
               !TextUtils.isEmpty(recognition.title)
@@ -149,9 +152,12 @@ public class MultiBoxTracker {
                       : String.format("%.2f", (100 * recognition.detectionConfidence));
       //            borderedText.drawText(canvas, trackedPos.left + cornerSize, trackedPos.top,
       // labelString);
-      borderedText.drawText(
-              canvas, trackedPos.left + cornerSize, trackedPos.top, labelString + "%", boxPaint);
+      //borderedText.drawText(
+      //        canvas, trackedPos.left + cornerSize, trackedPos.top, labelString + "%", boxPaint);
     }
+
+    borderedText.drawText(
+            canvas, 0, 200, String.format("log objects found: %2d", trackedObjects.size()), boxPaint);
   }
 
   private void processResults(final List<Recognition> results) {
